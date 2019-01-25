@@ -5,17 +5,20 @@ import re
 from wordcloud import WordCloud
 
 
-scope = ['https://spreadsheets.google.com/feeds',
+
+BASIC_DELIM = '\s|;|,|\n|[()]|\r'
+COMMON = ['of', 'to', 'a', 'it', 'they', 'there','at', 'an', 'the', 'and', 'with', 'is', 'in', 'between', 'not', 'that', 'for', 'from', 'about', 'being']
+
+
+
+
+def setup():
+    scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
 
-credentials = ServiceAccountCredentials.from_json_keyfile_name('my_secret.json', scope)
+    credentials = ServiceAccountCredentials.from_json_keyfile_name('my_secret.json', scope)
 
-gc = gspread.authorize(credentials)
-BASIC_DELIM = '\s|;|,|\n|[()]|\r'
-COMMON = ['at', 'an', 'the', 'and', 'with', 'is', 'in', 'between', 'not']
-
-
-ws = gc.open("The Bar - Template")
+    return  gspread.authorize(credentials)
 
 
 def worksheet2words(worksheet, sRange, cRange, delimiters):
@@ -58,9 +61,3 @@ def displayWordcloud(words):
 
 
 
-sRange = range(1,5)
-cRange = "C3:I3"
-oRange = "C5:I5"
-words = worksheet2words(ws, sRange, cRange, BASIC_DELIM)
-displayWordcloud(words)
-displayWordcloud(worksheet2wrods(gc.open(), sRange, oRange, BASIC_DELIM))
